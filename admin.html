@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popette - Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        .history-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .history-date {
+            font-weight: 600;
+            color: #333;
+        }
+        .history-user {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 Popette Admin</h1>
+            <p class="subtitle">Watering History</p>
+        </header>
+        
+        <main>
+            <button class="back-button" onclick="window.location.href='/'">← Back to Popette</button>
+            
+            <div class="plant-card">
+                <h2>Recent Watering History</h2>
+                <div id="history-list">
+                    <p>Loading history...</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Made with 💚 for Popette</p>
+        </footer>
+    </div>
+    
+    <script>
+        async function loadHistory() {
+            try {
+                const response = await fetch('/api/history');
+                const data = await response.json();
+                
+                const historyList = document.getElementById('history-list');
+                
+                if (data.history && data.history.length > 0) {
+                    historyList.innerHTML = data.history.map(item => `
+                        <div class="history-item">
+                            <div class="history-date">${new Date(item.watered_at).toLocaleString()}</div>
+                            <div class="history-user">Watered by: ${item.watered_by}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    historyList.innerHTML = '<p>No watering history yet.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+                document.getElementById('history-list').innerHTML = '<p>Error loading history.</p>';
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadHistory);
+    </script>
+</body>
+</html> 
