@@ -5,8 +5,10 @@ A simple, beautiful web app to track your plant Popette's watering schedule. Per
 ## Features
 
 - **Smart Watering Schedule**: Automatically tracks Monday and Thursday watering days
+- **Multi-User Support**: Multiple people can water Popette and see who watered when
 - **Visual Status**: Clear indicators for when to water, waiting periods, and overdue alerts
-- **Local Storage**: Remembers when Popette was last watered
+- **Server Storage**: Data persists across all users and devices
+- **Watering History**: View who watered Popette and when
 - **Responsive Design**: Works great on mobile devices
 - **Beautiful UI**: Modern, nature-inspired design with smooth animations
 
@@ -45,14 +47,14 @@ Simply upload these files to any web hosting service:
 ### Option 3: Deploy on Render (Recommended)
 1. Push your code to a GitHub repository
 2. Go to [render.com](https://render.com) and create an account
-3. Click "New +" and select "Static Site"
+3. Click "New +" and select "Web Service"
 4. Connect your GitHub repository
 5. Configure the deployment:
    - **Name**: `popette-plant-app` (or any name you prefer)
    - **Build Command**: `npm install`
    - **Start Command**: `npm start`
-   - **Publish Directory**: `.` (leave empty for root)
-6. Click "Create Static Site"
+   - **Environment**: Node
+6. Click "Create Web Service"
 7. Your app will be deployed and available at a Render URL
 
 ### Option 4: GitHub Pages
@@ -72,12 +74,15 @@ To integrate with NFC tags:
 
 ```
 popette/
-├── index.html      # Main HTML file
-├── styles.css      # Beautiful CSS styling
-├── script.js       # App logic and functionality
-├── package.json    # Node.js dependencies for Render
-├── render.yaml     # Render deployment configuration
-└── README.md       # This file
+├── index.html          # Main HTML file
+├── admin.html          # Admin page for viewing history
+├── styles.css          # Beautiful CSS styling
+├── script.js           # Original client-side only version
+├── script-server.js    # Server-enabled version (currently used)
+├── server.js           # Express server with SQLite database
+├── package.json        # Node.js dependencies for Render
+├── render.yaml         # Render deployment configuration
+└── README.md           # This file
 ```
 
 ## Customization

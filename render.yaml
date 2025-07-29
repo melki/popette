@@ -1,11 +1,9 @@
 services:
   - type: web
     name: popette-plant-app
-    env: static
+    env: node
     buildCommand: npm install
     startCommand: npm start
-    staticPublishPath: .
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html 
+    envVars:
+      - key: NODE_ENV
+        value: production 
