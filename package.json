@@ -1,0 +1,19 @@
+{
+  "name": "popette-plant-app",
+  "version": "1.0.0",
+  "description": "A beautiful web app for tracking plant watering schedule",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -s . -l $PORT",
+    "build": "echo 'No build step required for static site'"
+  },
+  "keywords": ["plant", "watering", "nfc", "web-app"],
+  "author": "Popette's Caretaker",
+  "license": "MIT",
+  "dependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+} 

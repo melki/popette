@@ -42,7 +42,20 @@ Simply upload these files to any web hosting service:
 - `styles.css`
 - `script.js`
 
-### Option 3: GitHub Pages
+### Option 3: Deploy on Render (Recommended)
+1. Push your code to a GitHub repository
+2. Go to [render.com](https://render.com) and create an account
+3. Click "New +" and select "Static Site"
+4. Connect your GitHub repository
+5. Configure the deployment:
+   - **Name**: `popette-plant-app` (or any name you prefer)
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Publish Directory**: `.` (leave empty for root)
+6. Click "Create Static Site"
+7. Your app will be deployed and available at a Render URL
+
+### Option 4: GitHub Pages
 1. Create a new GitHub repository
 2. Upload these files
 3. Enable GitHub Pages in repository settings
@@ -62,6 +75,8 @@ popette/
 ├── index.html      # Main HTML file
 ├── styles.css      # Beautiful CSS styling
 ├── script.js       # App logic and functionality
+├── package.json    # Node.js dependencies for Render
+├── render.yaml     # Render deployment configuration
 └── README.md       # This file
 ```
 
