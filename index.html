@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popette - Plant Care</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 Popette</h1>
+            <p class="subtitle">Your plant companion</p>
+        </header>
+        
+        <main>
+            <div class="plant-card">
+                <div class="plant-avatar">
+                    <span class="plant-emoji">🌿</span>
+                </div>
+                
+                <div class="status-section">
+                    <h2>Watering Status</h2>
+                    <div id="status-display" class="status-display">
+                        <!-- Status will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="last-watered">
+                    <h3>Last Watered</h3>
+                    <p id="last-watered-date">Never</p>
+                </div>
+                
+                <div class="next-watering">
+                    <h3>Next Watering</h3>
+                    <p id="next-watering-date">Monday</p>
+                </div>
+                
+                <button id="water-button" class="water-button">
+                    <span class="button-icon">💧</span>
+                    Water Popette
+                </button>
+                
+                <div class="watering-schedule">
+                    <h3>Watering Schedule</h3>
+                    <p>Monday & Thursday</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Made with 💚 for Popette</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 

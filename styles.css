@@ -1,0 +1,219 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px 0;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.subtitle {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plant-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+.plant-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+}
+
+.plant-avatar {
+    margin-bottom: 25px;
+}
+
+.plant-emoji {
+    font-size: 4rem;
+    display: block;
+    animation: gentle-bounce 3s ease-in-out infinite;
+}
+
+@keyframes gentle-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.status-section {
+    margin-bottom: 25px;
+}
+
+.status-section h2 {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.status-display {
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.status-display.ready {
+    background: linear-gradient(135deg, #4CAF50, #8BC34A);
+    color: white;
+}
+
+.status-display.waiting {
+    background: linear-gradient(135deg, #FF9800, #FFC107);
+    color: white;
+}
+
+.status-display.overdue {
+    background: linear-gradient(135deg, #F44336, #E91E63);
+    color: white;
+}
+
+.last-watered, .next-watering, .watering-schedule {
+    margin-bottom: 20px;
+}
+
+.last-watered h3, .next-watering h3, .watering-schedule h3 {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.last-watered p, .next-watering p, .watering-schedule p {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.water-button {
+    background: linear-gradient(135deg, #2196F3, #03A9F4);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.water-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.water-button:active {
+    transform: translateY(0);
+}
+
+.water-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.button-icon {
+    font-size: 1.2rem;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .plant-card {
+        padding: 25px 20px;
+    }
+    
+    .plant-emoji {
+        font-size: 3rem;
+    }
+}
+
+/* Loading animation */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Success animation */
+.success {
+    animation: success-pulse 0.6s ease-in-out;
+}
+
+@keyframes success-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+} 
