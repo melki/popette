@@ -4,7 +4,8 @@ class GoogleSheetsDB {
     constructor() {
         this.sheets = google.sheets({ version: 'v4' });
         this.spreadsheetId = process.env.GOOGLE_SHEET_ID;
-        this.range = 'Sheet1!A:C'; // Date, User, Timestamp columns
+        this.sheetName = 'Popette'; // Use a specific sheet name
+        this.range = `${this.sheetName}!A:C`; // Date, User, Timestamp columns
     }
 
     async getAuthClient() {
@@ -133,25 +134,69 @@ class GoogleSheetsDB {
         try {
             const auth = await this.getAuthClient();
             
-            // Check if headers exist
-            const response = await this.sheets.spreadsheets.values.get({
+            // First, check if the sheet exists
+            const spreadsheet = await this.sheets.spreadsheets.get({
                 auth,
                 spreadsheetId: this.spreadsheetId,
-                range: 'Sheet1!A1:C1',
             });
+            
+            const sheetExists = spreadsheet.data.sheets.some(sheet => 
+                sheet.properties.title === this.sheetName
+            );
+            
+            if (!sheetExists) {
+                // Create the sheet
+                await this.sheets.spreadsheets.batchUpdate({
+                    auth,
+                    spreadsheetId: this.spreadsheetId,
+                    resource: {
+                        requests: [{
+                            addSheet: {
+                                properties: {
+                                    title: this.sheetName
+                                }
+                            }
+                        }]
+                    }
+                });
+                console.log(`Created sheet: ${this.sheetName}`);
+            }
+            
+            // Check if headers exist
+            try {
+                const response = await this.sheets.spreadsheets.values.get({
+                    auth,
+                    spreadsheetId: this.spreadsheetId,
+                    range: `${this.sheetName}!A1:C1`,
+                });
 
-            if (!response.data.values || response.data.values.length === 0) {
-                // Add headers
+                if (!response.data.values || response.data.values.length === 0) {
+                    // Add headers
+                    await this.sheets.spreadsheets.values.update({
+                        auth,
+                        spreadsheetId: this.spreadsheetId,
+                        range: `${this.sheetName}!A1:C1`,
+                        valueInputOption: 'RAW',
+                        resource: {
+                            values: [['Date', 'User', 'Timestamp']]
+                        }
+                    });
+                    console.log('Added headers to sheet');
+                }
+            } catch (rangeError) {
+                // If range doesn't exist, add headers
                 await this.sheets.spreadsheets.values.update({
                     auth,
                     spreadsheetId: this.spreadsheetId,
-                    range: 'Sheet1!A1:C1',
+                    range: `${this.sheetName}!A1:C1`,
                     valueInputOption: 'RAW',
                     resource: {
                         values: [['Date', 'User', 'Timestamp']]
                     }
                 });
+                console.log('Added headers to new sheet');
             }
+            
         } catch (error) {
             console.error('Error initializing sheet:', error);
             throw error;

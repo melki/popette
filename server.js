@@ -16,7 +16,12 @@ app.use(express.static('.'));
 const db = new GoogleSheetsDB();
 
 // Initialize the sheet on startup
-db.initializeSheet().catch(console.error);
+db.initializeSheet().then(() => {
+    console.log('✅ Google Sheets initialized successfully');
+}).catch((error) => {
+    console.error('❌ Error initializing Google Sheets:', error.message);
+    console.log('Make sure your GOOGLE_SHEET_ID and GOOGLE_APPLICATION_CREDENTIALS are set correctly');
+});
 
 // Routes
 app.get('/api/status', async (req, res) => {

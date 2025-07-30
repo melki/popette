@@ -112,12 +112,15 @@ GOOGLE_APPLICATION_CREDENTIALS=./credentials.json
 
 ## What the Sheet Will Look Like
 
-Your Google Sheet will have these columns:
+Your Google Sheet will have a sheet named "Popette" with these columns:
 - **A**: Date (e.g., "12/25/2024")
 - **B**: User (e.g., "John")
 - **C**: Timestamp (e.g., "2024-12-25T10:30:00.000Z")
 
-The app will automatically add headers and manage the data!
+The app will automatically:
+- ✅ Create the "Popette" sheet if it doesn't exist
+- ✅ Add headers (Date, User, Timestamp)
+- ✅ Manage all the data for you
 
 ## Benefits
 
