@@ -7,7 +7,7 @@ A simple, beautiful web app to track your plant Popette's watering schedule. Per
 - **Smart Watering Schedule**: Automatically tracks Monday and Thursday watering days
 - **Multi-User Support**: Multiple people can water Popette and see who watered when
 - **Visual Status**: Clear indicators for when to water, waiting periods, and overdue alerts
-- **Server Storage**: Data persists across all users and devices
+- **Google Sheets Database**: Persistent data storage that survives deployments
 - **Watering History**: View who watered Popette and when
 - **Responsive Design**: Works great on mobile devices
 - **Beautiful UI**: Modern, nature-inspired design with smooth animations
@@ -23,6 +23,9 @@ A simple, beautiful web app to track your plant Popette's watering schedule. Per
 4. **Data Persistence**: Uses browser localStorage to remember watering history
 
 ## Setup & Deployment
+
+### Prerequisites
+Before deploying, you need to set up Google Sheets as your database. Follow the step-by-step guide in [GOOGLE_SHEETS_SETUP.md](GOOGLE_SHEETS_SETUP.md).
 
 ### Option 1: Simple Local Server
 ```bash
@@ -74,15 +77,17 @@ To integrate with NFC tags:
 
 ```
 popette/
-├── index.html          # Main HTML file
-├── admin.html          # Admin page for viewing history
-├── styles.css          # Beautiful CSS styling
-├── script.js           # Original client-side only version
-├── script-server.js    # Server-enabled version (currently used)
-├── server.js           # Express server with SQLite database
-├── package.json        # Node.js dependencies for Render
-├── render.yaml         # Render deployment configuration
-└── README.md           # This file
+├── index.html              # Main HTML file
+├── admin.html              # Admin page for viewing history
+├── styles.css              # Beautiful CSS styling
+├── script.js               # Original client-side only version
+├── script-server.js        # Server-enabled version (currently used)
+├── server.js               # Express server with Google Sheets integration
+├── google-sheets.js        # Google Sheets database module
+├── package.json            # Node.js dependencies for Render
+├── render.yaml             # Render deployment configuration
+├── GOOGLE_SHEETS_SETUP.md  # Step-by-step Google Sheets setup guide
+└── README.md               # This file
 ```
 
 ## Customization

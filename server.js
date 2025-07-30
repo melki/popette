@@ -1,7 +1,8 @@
+require('dotenv').config();
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const cors = require('cors');
+const GoogleSheetsDB = require('./google-sheets');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,63 +12,52 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
 
-// Database setup
-const db = new sqlite3.Database(':memory:'); // Use file: './popette.db' for persistent storage
+// Initialize Google Sheets database
+const db = new GoogleSheetsDB();
 
-// Initialize database
-db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS watering_log (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        watered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        watered_by TEXT DEFAULT 'Unknown'
-    )`);
-});
+// Initialize the sheet on startup
+db.initializeSheet().catch(console.error);
 
 // Routes
-app.get('/api/status', (req, res) => {
-    db.get('SELECT watered_at FROM watering_log ORDER BY watered_at DESC LIMIT 1', (err, row) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
+app.get('/api/status', async (req, res) => {
+    try {
+        const lastWatered = await db.getLastWatered();
         res.json({ 
-            lastWatered: row ? row.watered_at : null 
+            lastWatered: lastWatered ? lastWatered.timestamp : null 
         });
-    });
+    } catch (error) {
+        console.error('Error getting status:', error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.post('/api/water', (req, res) => {
-    const { wateredBy = 'Unknown' } = req.body;
-    
-    db.run('INSERT INTO watering_log (watered_by) VALUES (?)', [wateredBy], function(err) {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
+app.post('/api/water', async (req, res) => {
+    try {
+        const { wateredBy = 'Unknown' } = req.body;
+        const result = await db.addWatering(wateredBy);
         
-        // Get the newly inserted record
-        db.get('SELECT watered_at FROM watering_log WHERE id = ?', [this.lastID], (err, row) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.json({ 
-                success: true, 
-                lastWatered: row.watered_at,
-                wateredBy: wateredBy
-            });
+        res.json({ 
+            success: true, 
+            lastWatered: result.timestamp,
+            wateredBy: wateredBy
         });
-    });
+    } catch (error) {
+        console.error('Error adding watering:', error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.get('/api/history', (req, res) => {
-    db.all('SELECT watered_at, watered_by FROM watering_log ORDER BY watered_at DESC LIMIT 10', (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json({ history: rows });
-    });
+app.get('/api/history', async (req, res) => {
+    try {
+        const history = await db.getHistory(10);
+        res.json({ history: history.map(item => ({
+            watered_at: item.timestamp,
+            watered_by: item.user
+        })) });
+    } catch (error) {
+        console.error('Error getting history:', error);
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // Serve the main app

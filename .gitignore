@@ -45,6 +45,8 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
+.env.local
+.env.*.local
 
 # Python files (to avoid confusion with Render)
 *.py
