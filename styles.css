@@ -207,6 +207,67 @@ footer {
     pointer-events: none;
 }
 
+/* Leaderboard styles */
+.leaderboard {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.leaderboard h3 {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin: 5px 0;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.leaderboard-rank {
+    font-weight: 600;
+    color: #495057;
+    min-width: 30px;
+}
+
+.leaderboard-name {
+    flex: 1;
+    text-align: center;
+    font-weight: 500;
+    color: #333;
+}
+
+.leaderboard-count {
+    font-weight: 600;
+    color: #28a745;
+    min-width: 40px;
+    text-align: right;
+}
+
+.leaderboard-item:nth-child(1) {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    border-left: 4px solid #ffc107;
+}
+
+.leaderboard-item:nth-child(2) {
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    border-left: 4px solid #6c757d;
+}
+
+.leaderboard-item:nth-child(3) {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    border-left: 4px solid #dc3545;
+}
+
 /* Success animation */
 .success {
     animation: success-pulse 0.6s ease-in-out;

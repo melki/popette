@@ -65,6 +65,16 @@ app.get('/api/history', async (req, res) => {
     }
 });
 
+app.get('/api/leaderboard', async (req, res) => {
+    try {
+        const leaderboard = await db.getLeaderboard(3);
+        res.json({ leaderboard });
+    } catch (error) {
+        console.error('Error getting leaderboard:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Serve the main app
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));

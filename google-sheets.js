@@ -130,6 +130,42 @@ class GoogleSheetsDB {
         }
     }
 
+    async getLeaderboard(limit = 3) {
+        try {
+            const auth = await this.getAuthClient();
+            const response = await this.sheets.spreadsheets.values.get({
+                auth,
+                spreadsheetId: this.spreadsheetId,
+                range: this.range,
+            });
+
+            const rows = response.data.values;
+            if (!rows || rows.length <= 1) {
+                return [];
+            }
+
+            // Skip header row and count watering by user
+            const dataRows = rows.slice(1);
+            const userCounts = {};
+            
+            dataRows.forEach(row => {
+                const user = row[1] || 'Unknown';
+                userCounts[user] = (userCounts[user] || 0) + 1;
+            });
+
+            // Convert to array and sort by count
+            const leaderboard = Object.entries(userCounts)
+                .map(([user, count]) => ({ user, count }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, limit);
+
+            return leaderboard;
+        } catch (error) {
+            console.error('Error getting leaderboard from Google Sheets:', error);
+            throw error;
+        }
+    }
+
     async initializeSheet() {
         try {
             const auth = await this.getAuthClient();

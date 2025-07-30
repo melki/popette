@@ -96,14 +96,8 @@ class PopetteApp {
     }
 
     shouldWaterToday() {
-        if (!this.lastWatered) return true;
-        
-        const today = new Date();
-        const lastWatered = new Date(this.lastWatered);
-        
-        // Check if it's been at least 3 days since last watering
-        const daysSinceWatering = Math.floor((today - lastWatered) / (1000 * 60 * 60 * 24));
-        return daysSinceWatering >= 3;
+        // Always allow watering - removed the 3-day restriction
+        return true;
     }
 
     getStatus() {
@@ -123,7 +117,7 @@ class PopetteApp {
                 type: 'overdue',
                 message: 'Overdue for watering! 🚨'
             };
-        } else if (this.isWateringDay() && this.shouldWaterToday()) {
+        } else if (this.isWateringDay()) {
             return {
                 type: 'ready',
                 message: 'Time to water Popette! 💧'
@@ -131,8 +125,8 @@ class PopetteApp {
         } else {
             const daysUntil = this.getDaysUntilNextWatering();
             return {
-                type: 'waiting',
-                message: `Come back in ${daysUntil} day${daysUntil !== 1 ? 's' : ''} 🌱`
+                type: 'ready',
+                message: `You can water Popette anytime! Next scheduled: ${daysUntil} day${daysUntil !== 1 ? 's' : ''} 🌱`
             };
         }
     }
@@ -156,7 +150,7 @@ class PopetteApp {
         });
     }
 
-    updateDisplay() {
+    async updateDisplay() {
         const status = this.getStatus();
         const statusDisplay = document.getElementById('status-display');
         const lastWateredDate = document.getElementById('last-watered-date');
@@ -171,17 +165,45 @@ class PopetteApp {
         lastWateredDate.textContent = this.formatDate(this.lastWatered);
         nextWateringDate.textContent = this.formatNextWatering();
 
-        // Update button state
-        if (status.type === 'ready') {
-            waterButton.disabled = false;
-            waterButton.textContent = '💧 Water Popette';
-        } else {
-            waterButton.disabled = true;
-            waterButton.textContent = 'Not time yet 🌱';
+        // Update button state - always enabled now
+        waterButton.disabled = false;
+        waterButton.textContent = '💧 Water Popette';
+
+        // Update leaderboard
+        await this.updateLeaderboard();
+    }
+
+    async updateLeaderboard() {
+        try {
+            const response = await fetch('/api/leaderboard');
+            const data = await response.json();
+            const leaderboardList = document.getElementById('leaderboard-list');
+            
+            if (data.leaderboard && data.leaderboard.length > 0) {
+                leaderboardList.innerHTML = data.leaderboard.map((item, index) => `
+                    <div class="leaderboard-item">
+                        <span class="leaderboard-rank">${index + 1}.</span>
+                        <span class="leaderboard-name">${item.user}</span>
+                        <span class="leaderboard-count">${item.count} 💧</span>
+                    </div>
+                `).join('');
+            } else {
+                leaderboardList.innerHTML = '<p>No watering data yet!</p>';
+            }
+        } catch (error) {
+            console.error('Error loading leaderboard:', error);
+            document.getElementById('leaderboard-list').innerHTML = '<p>Error loading leaderboard</p>';
         }
     }
 
     async waterPlant() {
+        // Play water sound
+        const waterSound = document.getElementById('water-sound');
+        if (waterSound) {
+            waterSound.currentTime = 0;
+            waterSound.play().catch(e => console.log('Could not play sound:', e));
+        }
+
         const result = await this.saveData();
         this.updateDisplay();
         
