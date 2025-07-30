@@ -64,10 +64,18 @@ GOOGLE_APPLICATION_CREDENTIALS=./credentials.json
 ```
 
 ### For Render Deployment:
-1. Go to your Render service settings
-2. Add these environment variables:
+1. **Format your credentials** (run this locally):
+   ```bash
+   node format-credentials.js
+   ```
+   This will give you the properly formatted JSON to copy.
+
+2. Go to your Render service settings
+3. Add these environment variables:
    - `GOOGLE_SHEET_ID`: Your spreadsheet ID
-   - `GOOGLE_APPLICATION_CREDENTIALS`: The contents of your JSON credentials file
+   - `GOOGLE_APPLICATION_CREDENTIALS`: **Copy and paste the entire JSON content** from the script output
+   
+   **Important**: The JSON should be on a single line with no line breaks.
 
 ## Step 8: Add Credentials File
 

@@ -9,8 +9,31 @@ class GoogleSheetsDB {
 
     async getAuthClient() {
         // For service account authentication
+        let credentials;
+        
+        if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+            // If credentials are provided as environment variable (JSON string)
+            try {
+                credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+            } catch (error) {
+                console.error('Error parsing GOOGLE_APPLICATION_CREDENTIALS:', error);
+                throw new Error('Invalid GOOGLE_APPLICATION_CREDENTIALS format');
+            }
+        } else {
+            // Fallback to file (for local development)
+            const fs = require('fs');
+            const path = require('path');
+            const credentialsPath = path.join(__dirname, 'credentials.json');
+            
+            if (fs.existsSync(credentialsPath)) {
+                credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+            } else {
+                throw new Error('No Google credentials found. Please set GOOGLE_APPLICATION_CREDENTIALS environment variable or add credentials.json file.');
+            }
+        }
+
         const auth = new google.auth.GoogleAuth({
-            keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS || './credentials.json',
+            credentials: credentials,
             scopes: ['https://www.googleapis.com/auth/spreadsheets'],
         });
         return auth.getClient();
